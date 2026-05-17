@@ -1,0 +1,15 @@
+/target
+**/*.rs.bk
+.env
+.env.local
+.DS_Store
+*.log
+
+# Criterion benchmark output
+/target/criterion
+
+# Editor scratch
+.idea/
+.vscode/
+*.swp
+*.swo

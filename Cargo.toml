@@ -1,0 +1,80 @@
+[workspace]
+resolver = "2"
+members = [
+    "ledger-core",
+    "ledger-db",
+    "ledger-api",
+]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.78"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+# --- Internal crates ---
+ledger-core = { path = "ledger-core" }
+ledger-db = { path = "ledger-db" }
+
+# --- Async runtime ---
+tokio = { version = "1", features = ["full"] }
+
+# --- Database (compile-time checked SQL, no ORM) ---
+sqlx = { version = "0.8", default-features = false, features = [
+    "runtime-tokio-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "json",
+    "macros",
+    "migrate",
+] }
+
+# --- HTTP server ---
+axum = "0.7"
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["trace", "request-id", "util", "timeout"] }
+http = "1"
+
+# --- Serialization ---
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# --- Domain types ---
+uuid = { version = "1", features = ["v7", "serde"] }
+chrono = { version = "0.4", default-features = false, features = ["serde", "clock"] }
+
+# --- Error handling ---
+thiserror = "1"   # typed errors for library code (ledger-core, ledger-db)
+anyhow = "1"      # convenient errors for the binary / main
+
+# --- Observability ---
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# --- Idempotency-key hashing ---
+sha2 = "0.10"
+hex = "0.4"
+
+# --- Background tasks / shutdown ---
+tokio-util = { version = "0.7", features = ["rt"] }
+
+# --- Dev-only (still declared at workspace level so versions match across crates) ---
+testcontainers = "0.20"
+testcontainers-modules = { version = "0.8", features = ["postgres"] }
+proptest = "1"
+criterion = { version = "0.5", features = ["html_reports"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+futures = "0.3"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"
+
+[profile.bench]
+inherits = "release"
+debug = true

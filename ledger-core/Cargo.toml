@@ -1,0 +1,19 @@
+[package]
+name = "ledger-core"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Pure types, validation, and canonical-JSON for the ledger service. No I/O."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+sha2.workspace = true
+hex.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true

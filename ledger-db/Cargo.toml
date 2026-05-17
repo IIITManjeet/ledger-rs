@@ -1,0 +1,26 @@
+[package]
+name = "ledger-db"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Postgres-backed storage for the ledger service. Compile-time checked SQL."
+
+[dependencies]
+ledger-core.workspace = true
+
+sqlx.workspace = true
+tokio.workspace = true
+
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+
+thiserror.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+testcontainers.workspace = true
+testcontainers-modules.workspace = true
+tokio = { workspace = true }
