@@ -46,7 +46,7 @@ impl LedgerDb {
     /// isolation. Retries on serialization failures. Returns the full
     /// committed result.
     ///
-    /// Order of operations inside the transaction (PLAN §3):
+    /// Order of operations inside the transaction:
     ///   1. SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
     ///   2. INSERT into transactions (one row)
     ///   3. INSERT into postings (N rows, loop)

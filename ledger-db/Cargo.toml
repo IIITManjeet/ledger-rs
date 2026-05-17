@@ -20,6 +20,11 @@ chrono.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 
+[features]
+# Exposes test-only helpers (TestDb, idempotency_force_expire). Off by default;
+# ledger-api enables this in its dev-dependencies for integration tests.
+testing = []
+
 [dev-dependencies]
 testcontainers.workspace = true
 testcontainers-modules.workspace = true

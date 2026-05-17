@@ -2,11 +2,13 @@
 
 pub mod accounts;
 pub mod error;
+pub mod idempotency;
 pub mod retry;
 pub mod transactions;
 
 pub use accounts::{AccountRow, AccountWithBalances, CreateAccountInput, CurrencyBalance};
 pub use error::DbError;
+pub use idempotency::IdempotencyOutcome;
 pub use retry::retry_serializable;
 pub use transactions::{
     InsertTransactionInput, PostingRow, TransactionRow, TransactionWithPostings,
@@ -39,7 +41,6 @@ impl LedgerDb {
             .after_connect(|conn, _meta| {
                 Box::pin(async move {
                     // Guard against runaway queries and forgotten transactions.
-                    // Matches PLAN.md §5 operational settings.
                     sqlx::query("SET statement_timeout = '5000ms'")
                         .execute(&mut *conn)
                         .await?;

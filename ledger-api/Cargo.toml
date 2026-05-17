@@ -34,6 +34,7 @@ sqlx.workspace = true   # the pool type and migration runner live in sqlx
 
 sha2.workspace = true
 hex.workspace = true
+base64 = "0.22"
 
 thiserror.workspace = true
 anyhow.workspace = true

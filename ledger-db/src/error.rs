@@ -22,7 +22,6 @@ pub enum DbError {
     UniqueViolation(String),
 
     /// SSI retry budget exhausted. The handler should return 503 and mark
-    /// the idempotency row FAILED (PLAN §4 step 6).
     #[error("serializable retry budget exhausted after {0} attempts")]
     RetryExhausted(u32),
 
@@ -69,8 +68,7 @@ pub(crate) fn classify(err: sqlx::Error) -> DbError {
 }
 
 /// True if `err` is a Postgres serialization failure (SQLSTATE 40001) or
-/// deadlock (SQLSTATE 40P01). Both are safe to retry; we treat them
-/// identically per PLAN §3.
+/// deadlock (SQLSTATE 40P01). Both are safe to retry; we treat them identical
 pub(crate) fn is_retryable_serialization(err: &sqlx::Error) -> bool {
     err.as_database_error()
         .and_then(|e| e.code())
