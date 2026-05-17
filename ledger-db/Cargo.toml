@@ -7,7 +7,7 @@ publish.workspace = true
 description = "Postgres-backed storage for the ledger service. Compile-time checked SQL."
 
 [dependencies]
-ledger-core.workspace = true
+ledger-core = { workspace = true, features = ["sqlx"] }
 
 sqlx.workspace = true
 tokio.workspace = true
@@ -24,3 +24,4 @@ tracing.workspace = true
 testcontainers.workspace = true
 testcontainers-modules.workspace = true
 tokio = { workspace = true }
+futures.workspace = true

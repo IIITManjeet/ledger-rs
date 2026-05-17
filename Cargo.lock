@@ -1484,6 +1484,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "sqlx",
  "thiserror 1.0.69",
  "uuid",
 ]
@@ -1493,6 +1494,7 @@ name = "ledger-db"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "futures",
  "ledger-core",
  "serde",
  "serde_json",

@@ -15,5 +15,14 @@ thiserror.workspace = true
 sha2.workspace = true
 hex.workspace = true
 
+# Optional: when the `sqlx` feature is on, our enums derive sqlx::Type
+# so they map directly to Postgres custom enums. ledger-db enables this;
+# anyone else using ledger-core gets a sqlx-free crate by default.
+sqlx = { workspace = true, optional = true }
+
+[features]
+default = []
+sqlx = ["dep:sqlx"]
+
 [dev-dependencies]
 proptest.workspace = true

@@ -3,6 +3,11 @@ use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[cfg_attr(feature = "sqlx", derive(sqlx::Type))]
+#[cfg_attr(
+    feature = "sqlx",
+    sqlx(type_name = "account_type", rename_all = "SCREAMING_SNAKE_CASE")
+)]
 pub enum AccountType {
     Asset,
     Liability,
@@ -13,6 +18,11 @@ pub enum AccountType {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[cfg_attr(feature = "sqlx", derive(sqlx::Type))]
+#[cfg_attr(
+    feature = "sqlx",
+    sqlx(type_name = "direction", rename_all = "SCREAMING_SNAKE_CASE")
+)]
 pub enum Direction {
     Debit,
     Credit,
