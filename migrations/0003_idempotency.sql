@@ -1,7 +1,8 @@
 -- 0003_idempotency.sql
 -- Idempotency key store. One row per client-supplied key, lifecycle:
 --     (no row) -> PENDING -> COMPLETED | FAILED
--- with FAILED also reachable directly when we mark retry-exhaustion (see PLAN §4 step 6).
+-- FAILED is also reachable directly when we mark retry-exhaustion (503)
+-- or a deterministic 4xx so the same body produces the same response on replay.
 
 CREATE TYPE idempotency_status AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
 
@@ -39,7 +40,8 @@ CREATE TABLE idempotency_keys (
 );
 
 -- Sweeper scans this. PENDING rows are excluded — they're handled by a
--- separate operator-gated recovery job (see PLAN §4 step 7).
+-- separate operator-gated recovery job that promotes orphans to FAILED
+-- after a longer timeout (covers process crashes mid-write).
 CREATE INDEX idempotency_keys_sweeper_idx
     ON idempotency_keys(expires_at)
     WHERE status <> 'PENDING';

@@ -36,6 +36,10 @@ sha2.workspace = true
 hex.workspace = true
 base64 = "0.22"
 
+# Metrics facade + Prometheus exporter for /metrics
+metrics = "0.24"
+metrics-exporter-prometheus = { version = "0.17", default-features = false }
+
 thiserror.workspace = true
 anyhow.workspace = true
 

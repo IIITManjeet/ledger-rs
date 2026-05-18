@@ -15,8 +15,9 @@ CREATE TABLE postings (
     CONSTRAINT postings_amount_positive CHECK (amount_minor > 0),
 
     -- ISO-4217 shape: exactly 3 uppercase ASCII letters.
-    -- (We do NOT check that the code is a real currency — that's the
-    -- caller's responsibility; see PLAN.md §5.)
+    -- We do NOT check that the code is a real currency — that's the
+    -- caller's responsibility. Minor-unit semantics (USD cents vs JPY
+    -- yen vs KWD 3-decimal fils) live in the caller too.
     CONSTRAINT postings_currency_iso CHECK (currency ~ '^[A-Z]{3}$')
 );
 

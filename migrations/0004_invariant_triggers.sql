@@ -9,7 +9,8 @@
 --
 -- Postgres requires constraint triggers to be FOR EACH ROW. For an N-line
 -- transaction each function runs N times with the same result — we accept
--- the 2× cost on the common 2-line case (see DECISIONS.md D6).
+-- the redundant work on the common 2-line case; the alternative (session-
+-- scoped "already validated" markers) adds complexity for marginal gain.
 
 -- ---------------------------------------------------------------------------
 -- I5 + I6: every transaction has >= 2 postings AND sum of debits == sum of

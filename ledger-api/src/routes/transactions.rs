@@ -76,6 +76,14 @@ pub async fn create(
 
     // 3. Check idempotency state.
     let outcome = state.db.idempotency_begin(key, &hash).await?;
+    let outcome_label = match &outcome {
+        IdempotencyOutcome::Fresh => "fresh",
+        IdempotencyOutcome::InFlight => "in_flight",
+        IdempotencyOutcome::Conflict => "conflict",
+        IdempotencyOutcome::Replay { .. } => "replay",
+    };
+    metrics::counter!("idempotency_outcome_total", "kind" => outcome_label).increment(1);
+
     match outcome {
         IdempotencyOutcome::Fresh => execute_fresh(state, key, body).await,
         IdempotencyOutcome::InFlight => Err(AppError::in_flight()),

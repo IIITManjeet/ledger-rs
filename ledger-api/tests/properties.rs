@@ -137,7 +137,10 @@ fn txn_strategy(pool: Vec<AcctInfo>) -> impl Strategy<Value = TransactionInput> 
         })
 }
 
-fn seq_strategy(pool: Vec<AcctInfo>, len: std::ops::RangeInclusive<usize>) -> impl Strategy<Value = Vec<TransactionInput>> {
+fn seq_strategy(
+    pool: Vec<AcctInfo>,
+    len: std::ops::RangeInclusive<usize>,
+) -> impl Strategy<Value = Vec<TransactionInput>> {
     proptest::collection::vec(txn_strategy(pool), len)
 }
 
@@ -145,7 +148,11 @@ fn seq_strategy(pool: Vec<AcctInfo>, len: std::ops::RangeInclusive<usize>) -> im
 // Helpers to apply one transaction via the real HTTP API and update the model
 // ============================================================================
 
-async fn post_txn(app: &TestApp, key: &str, txn: &TransactionInput) -> Result<TransactionId, StatusCode> {
+async fn post_txn(
+    app: &TestApp,
+    key: &str,
+    txn: &TransactionInput,
+) -> Result<TransactionId, StatusCode> {
     let body = json!({
         "description": "p",
         "postings": txn.postings.iter().map(|p| json!({
@@ -205,7 +212,10 @@ fn apply_to_model(
     txn: &TransactionInput,
 ) {
     for p in &txn.postings {
-        let acc = pool.iter().find(|a| a.id == p.account_id).expect("known account");
+        let acc = pool
+            .iter()
+            .find(|a| a.id == p.account_id)
+            .expect("known account");
         let signed = if p.direction == acc.normal {
             p.amount_minor.get()
         } else {
@@ -269,7 +279,8 @@ async fn p1_p2_conservation_and_model_equivalence() {
                     .unwrap();
                     for row in rows {
                         prop_assert_eq!(
-                            row.net, 0,
+                            row.net,
+                            0,
                             "P1 broken in {}: Σ debits - Σ credits = {}",
                             row.currency.trim(),
                             row.net
@@ -287,9 +298,13 @@ async fn p1_p2_conservation_and_model_equivalence() {
                             let expected = model.get(&(acc.id, cur)).copied().unwrap_or(0);
                             let actual = api.get(&cur).copied().unwrap_or(0);
                             prop_assert_eq!(
-                                actual, expected,
+                                actual,
+                                expected,
                                 "P2 broken for {:?}/{:?}: api={}, model={}",
-                                acc.id, cur, actual, expected
+                                acc.id,
+                                cur,
+                                actual,
+                                expected
                             );
                         }
                     }
@@ -365,9 +380,12 @@ async fn p3_reversal_symmetry() {
                         let api = get_balances(app_ref, acc.id).await;
                         for (cur, amt) in &api {
                             prop_assert_eq!(
-                                *amt, 0,
+                                *amt,
+                                0,
                                 "P3 broken for {:?}/{:?}: balance is {}, expected 0",
-                                acc.id, cur, amt
+                                acc.id,
+                                cur,
+                                amt
                             );
                         }
                     }
