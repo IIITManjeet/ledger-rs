@@ -79,4 +79,4 @@ jobs:
       - name: Run migrations
         run: sqlx migrate run
       - run: cargo build --workspace --all-targets
-      - run: cargo test --workspace --all-targets -- --skip ignored
+      - run: cargo test --workspace --tests -- --skip ignored
